@@ -1,0 +1,39 @@
+package parser_gener
+
+import (
+	"fmt"
+	"strings"
+)
+
+type Anno struct {
+	Type  string
+	Value string
+}
+
+func (s *Anno) String() string {
+	return fmt.Sprintf("// @%s(%s)", s.Type, s.Value)
+}
+
+func GetAnno(doc string) (*Anno, bool) {
+	if !(strings.HasPrefix(doc, "// @") || strings.HasPrefix(doc, "//@")) {
+		return nil, false
+	}
+
+	sIdx := strings.Index(doc, "@")
+	doc = doc[sIdx+1:]
+
+	if strings.HasPrefix(doc, " ") {
+		return nil, false
+	}
+
+	var key, val string
+	if strings.Contains(doc, "(") && strings.Contains(doc, ")") {
+		submatch := AnnoKVRegex.FindStringSubmatch(doc)
+		key = strings.TrimSpace(submatch[1])
+		val = strings.TrimSpace(submatch[2])
+	} else {
+		submatch := AnnoKRegex.FindStringSubmatch(doc)
+		key = strings.TrimSpace(submatch[1])
+	}
+	return &Anno{key, val}, true
+}

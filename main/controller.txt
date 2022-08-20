@@ -1,0 +1,63 @@
+package controller
+
+import (
+	"github.com/gin-gonic/gin"
+	"gitlab.alibaba-inc.com/kiss/cblvs-gid/service"
+)
+
+type IdController struct {
+	*BaseController
+
+	idServer     *service.IdService
+}
+
+func NewIdController(sv *service.IdService) *IdController {
+	return &IdController{
+		BaseController: NewBaseController("HelloController"),
+		idServer: sv,
+	}
+}
+
+// GET /id/ts/:ts
+func (ct *IdController) Convert10Ts2Tid(c *gin.Context) {
+	timestampStr := c.Param("ts")
+
+	caid, _, err := ct.idServer.Convert10Ts2Tid(timestampStr)
+	if err != nil {
+		panic(err)
+	}
+
+	ct.OKCodeMsg(c, caid)
+	return
+}
+
+// GET /id/camera/:camera
+func (ct *IdController) ConvertCamera2Cid(c *gin.Context) {
+	camera := c.Param("camera")
+
+	tsid, err := ct.idServer.ConvertCamera2Cid(camera)
+	if err != nil {
+		panic(err)
+	}
+
+	ct.OKCodeMsg(c, tsid)
+	return
+}
+
+// GET /meta/:ts/:camera
+func (ct *IdController) GenerateMeta(c *gin.Context) {
+	ts := c.Param("ts")
+	camera := c.Param("camera")
+
+	id, tsId, caId, err := ct.idServer.GenerateMetaId(ts, camera)
+	if err != nil {
+		panic(err)
+	}
+
+	hs := gin.H{
+		"id":   id,
+		"_tsId": tsId,
+		"_caId": caId,
+	}
+	ct.OKCodeMsg(c, hs)
+}

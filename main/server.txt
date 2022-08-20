@@ -1,0 +1,37 @@
+package main
+
+import "context"
+
+// @SERVICE
+type IdService struct {
+	timestampNo int
+	cameraNo int
+}
+
+func NewIdService(timestampNo int, cameraNo int)*IdService {
+	return &IdService{
+		timestampNo: timestampNo,
+		cameraNo: cameraNo,
+	}
+}
+
+// @GET("/user/add")
+func (sv *IdService) Convert10Ts2Tid(ctx context.Context,
+	timestampStr string)
+(tsid string, suffix string, err error) {
+	return "", "", nil
+}
+
+// @POST("/user/add")
+func (sv *IdService) ConvertCamera2Cid(camera string) (string, error) {
+	return "", nil
+}
+
+// @RPC(req1 common.IdReq1, res2 *common.IdRes2)
+func (sv *IdService) GenerateMetaId(timestamp string, camera string) error {
+	return "", "", "", nil
+}
+
+
+
+

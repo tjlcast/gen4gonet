@@ -1,0 +1,31 @@
+package service
+
+package rpc
+
+import (
+"github.com/tjlcast/go_common/net_utils"
+"gitlab.alibaba-inc.com/kiss/cblvs-gid/common"
+)
+
+type IdRpcClient struct {
+	endpoint string
+}
+
+func NewIdRpcClient(endpoint string) *IdRpcClient {
+	return &IdRpcClient{endpoint: endpoint}
+}
+
+// GET /id/ts/:ts
+func (ct *IdRpcClient) Convert10Ts2Tid(req common.IdReq, res *common.IdRes) error {
+	return net_utils.SendTcp(ct.endpoint, "IdRpc.Convert10Ts2Tid", req, &res)
+}
+
+// GET /id/camera/:camera
+func (ct *IdRpcClient) ConvertCamera2Cid(req common.IdReq, res *common.IdRes) error {
+	return net_utils.SendTcp(ct.endpoint, "IdRpc.ConvertCamera2Cid", req, &res)
+}
+
+// GET /meta/:ts/:camera
+func (ct *IdRpcClient) GenerateMeta(req common.IdReq, res *common.IdRes) error {
+	return net_utils.SendTcp(ct.endpoint, "IdRpc.GenerateMeta", req, &res)
+}
