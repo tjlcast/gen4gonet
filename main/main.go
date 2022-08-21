@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/tjlcast/gen4gonet/builder"
 	"github.com/tjlcast/gen4gonet/parser_gener"
 	"github.com/tjlcast/go_common/file_utils"
@@ -29,16 +30,20 @@ func main() {
 	}
 
 	bean := parser_gener.ParseAClzFile(filePath)
+	var tpl string
 	switch *workType {
 	case "base":
-		builder.Base(bean)
+		tpl = builder.Base(bean)
 	case "rpcs":
-		builder.BuildRpcSrvApi(bean)
+		tpl = builder.BuildRpcSrvApi(bean)
 	case "rpcc":
-		builder.BuildRpcCliApi(bean)
+		tpl = builder.BuildRpcCliApi(bean)
 	case "rests":
-		builder.BuildRestApi(bean)
+		tpl = builder.BuildRestApi(bean)
 	default:
 		log_utils.Logger.Error("Not support -g: " + *workType)
+		os.Exit(-1)
 	}
+
+	fmt.Println(tpl)
 }

@@ -7,6 +7,10 @@ import (
 )
 
 type Struct struct {
+	Package string
+
+	Imports string
+
 	Name  string
 
 	Fields VarTypePairArr
@@ -21,7 +25,7 @@ type Struct struct {
 }
 
 func NewStruct(sName string) *Struct {
-	return &Struct{Name: sName, Funcs: []*StructFunc{}, Fields: []*VarTypePair{}}
+	return &Struct{Package: "main", Name: sName, Funcs: []*StructFunc{}, Fields: []*VarTypePair{}}
 }
 
 func ParseStruct(doc string) (*Struct, error) {
@@ -66,6 +70,10 @@ func (s *Struct) Tpl() string {
 	allFuncTpl := s.AllFuncTpl()
 
 	tpl := `
+package %s
+
+%s
+
 /// Auto Generated
 type %s struct {
 	%s
@@ -77,6 +85,6 @@ type %s struct {
 // funcs
 %s 
 `
-	tpl = fmt.Sprintf(tpl, s.Name, s.Fields.FieldsTpl(), conTpl, allFuncTpl)
+	tpl = fmt.Sprintf(tpl, s.Package, s.Imports, s.Name, s.Fields.FieldsTpl(), conTpl, allFuncTpl)
 	return tpl
 }

@@ -48,12 +48,12 @@ func BuildRpcCliApi(bean *parser_gener.Struct) string {
 		return true
 	})
 
-	var header = `
+	bean.Imports = `
 import "github.com/tjlcast/go_common/net_utils"
 import "github.com/gin-gonic/gin"
 	`
 	tpl := bean.Tpl()
 
-	return header + tpl
+	return tpl
 }
 
