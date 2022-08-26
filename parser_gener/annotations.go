@@ -37,3 +37,12 @@ func GetAnno(doc string) (*Anno, bool) {
 	}
 	return &Anno{key, val}, true
 }
+
+func IsAwsomeAnno(name string, annos []*Anno) bool {
+	for _, anno := range annos {
+		if name == anno.Type {
+			return true
+		}
+	}
+	return false
+}

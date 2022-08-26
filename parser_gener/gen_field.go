@@ -6,25 +6,25 @@ import (
 )
 
 type VarTypePair struct {
-	vName string
-	vType string
+	VName string
+  	VType string
 }
 
 func (s *VarTypePair) Name() string {
-	return s.vName
+	return s.VName
 }
 
 func (s *VarTypePair) Type() string {
-	return s.vType
+	return s.VType
 }
 
 func NewVarTypePair(vName string, vType string) *VarTypePair {
-	return &VarTypePair{vName: vName, vType: vType}
+	return &VarTypePair{VName: vName, VType: vType}
 }
 
 func (s *VarTypePair) Tpl() string {
 	tpl := "%s %s"
-	tpl = fmt.Sprintf(tpl, s.vName, s.vType)
+	tpl = fmt.Sprintf(tpl, s.VName, s.VType)
 	return tpl
 }
 
@@ -71,22 +71,22 @@ func (s VarTypePairArr) FieldsTpl() string {
 
 	var arr []string
 	for _, vt := range s {
-		arr = append(arr, fmt.Sprintf("%s %s", vt.vName, vt.vType))
+		arr = append(arr, fmt.Sprintf("%s %s", vt.VName, vt.VType))
 	}
 	return strings.Join(arr, "\n")
 }
 
 type VarType struct {
-	vName string
+	VName string
 }
 
 func NewVarType(vName string) *VarType {
-	return &VarType{vName: vName}
+	return &VarType{VName: vName}
 }
 
 func (s *VarType) Tpl() string {
 	tpl := "%s"
-	tpl = fmt.Sprintf(tpl, s.vName)
+	tpl = fmt.Sprintf(tpl, s.VName)
 	return tpl
 }
 

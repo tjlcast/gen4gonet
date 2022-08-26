@@ -6,6 +6,23 @@ import (
 	"strings"
 )
 
+var StructTpl = `
+package %s
+
+%s
+
+/// Auto Generated
+type %s struct {
+	%s
+}
+
+// constructor
+%s 
+
+// funcs
+%s 
+`
+
 type Struct struct {
 	Package string
 
@@ -43,8 +60,8 @@ func (s *Struct) ConstructTpl() string {
 	var args []string
 	var fuzhi []string
 	for _, field := range s.Fields {
-		args = append(args, field.vName+"1 "+field.vType)
-		fuzhi = append(fuzhi, field.vName+": "+field.vName+"1,")
+		args = append(args, field.VName+"1 "+field.VType)
+		fuzhi = append(fuzhi, field.VName+": "+field.VName+"1,")
 	}
 
 	tpl := `
@@ -69,22 +86,7 @@ func (s *Struct) Tpl() string {
 	conTpl := s.ConstructTpl()
 	allFuncTpl := s.AllFuncTpl()
 
-	tpl := `
-package %s
-
-%s
-
-/// Auto Generated
-type %s struct {
-	%s
-}
-
-// constructor
-%s 
-
-// funcs
-%s 
-`
+	tpl := StructTpl
 	tpl = fmt.Sprintf(tpl, s.Package, s.Imports, s.Name, s.Fields.FieldsTpl(), conTpl, allFuncTpl)
 	return tpl
 }

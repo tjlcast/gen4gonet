@@ -15,3 +15,13 @@ func NewHelloWorldService(name string, age int, score float64) *HelloWorldServic
 func (srv *HelloWorldService) Hello() string {
 	return "This is " + srv.Name
 }
+
+// @RPC
+func (srv *HelloWorldService) Hello1(name string, age int) string {
+	return "Hello: " + name
+}
+
+// @RPC
+func (srv *HelloWorldService) Hello2(car Car) string {
+	return "Hello: " + car.PlateNo
+}

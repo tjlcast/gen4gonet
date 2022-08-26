@@ -5,6 +5,20 @@ import (
 	"strings"
 )
 
+var (
+	PureFuncTpl = `
+func %s(%s) %s {
+	%s
+}
+`
+
+	StructFuncTpl = `
+func (s *%s)%s(%s) %s {
+	%s
+}
+`
+)
+
 type StructFuncArr []*StructFunc
 
 func (s *StructFuncArr) Append(sFunc *StructFunc) {
@@ -12,7 +26,9 @@ func (s *StructFuncArr) Append(sFunc *StructFunc) {
 }
 
 type StructFunc struct {
-	Self string
+	Self string // the name of bean
+
+	Comments string
 
 	Name string
 	Args VarTypePairArr
@@ -105,20 +121,12 @@ func ParsePureFunc(lines *[]string) (*StructFunc, error) {
 }
 
 func (s *StructFunc) Tpl() string {
-	pureTpl := `
-func %s(%s) %s {
-	%s
-}
-`
+	pureTpl := PureFuncTpl
+	structTpl := StructFuncTpl
 
-	structTpl := `
-func (s *%s)%s(%s) %s {
-	%s
-}
-`
 	if s.Self == "" {
-		return fmt.Sprintf(pureTpl, s.Name, s.Args.Tpl(), s.Rets.Tpl(), s.FuncBody)
+		return s.Comments + "\n" + fmt.Sprintf(pureTpl, s.Name, s.Args.Tpl(), s.Rets.Tpl(), s.FuncBody)
 	} else {
-		return fmt.Sprintf(structTpl, s.GetSelfEntity(), s.Name, s.Args.Tpl(), s.Rets.Tpl(), s.FuncBody)
+		return s.Comments + "\n" + fmt.Sprintf(structTpl, s.GetSelfEntity(), s.Name, s.Args.Tpl(), s.Rets.Tpl(), s.FuncBody)
 	}
 }

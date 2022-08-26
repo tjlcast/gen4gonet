@@ -46,4 +46,9 @@ func main() {
 	}
 
 	fmt.Println(tpl)
+
+	_, err := file_utils.SaveFile("main_out.txt", []byte(tpl))
+	if err != nil {
+	    panic(err)
+	}
 }
